@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <style>
+        .navbar-default {
+            border-radius: 0;
+        }
+
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+
+        .btn-circle {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            padding: 6px;
+            font-size: 20px;
+            border-radius: 45px;
+        }
+    </style>
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+{# 导航条 #}
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+
+        {# 左上角标题 #}
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">MIS</a>
+        </div>
+
+        {# 内容 #}
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {# 左侧 #}
+            <ul class="nav navbar-nav">
+                <li><a href="#">产品介绍</a></li>
+                <li><a href="#">项目列表</a></li>
+                <li><a href="#">帮助文档</a></li>
+                <li><a href="#">链接</a></li>
+            </ul>
+
+            {# 右侧 #}
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.mis.user %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">{{ request.mis.user.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">管理中心</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{% url 'logout' %}">退 出</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">登 录</a></li>
+                    <li><a href="{% url 'register' %}">注 册</a></li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div style="height: 65px"></div>
+
+<!-- Back to top button -->
+<button type="button" class="btn btn-primary btn-floating btn-lg btn-circle" id="btn-back-to-top">
+    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+
+{% block content %}{% endblock %}
+
+<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+<script>
+    //Get the button
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+</script>
+{% block js %}{% endblock %}
+</body>
+</html>
+

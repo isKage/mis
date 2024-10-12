@@ -1,0 +1,81 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 用户登录 {% endblock %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <style>
+        .error-msg {
+            color: red;
+            position: absolute;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            margin-top: 10px;
+        }
+
+        .jump-link {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="account">
+        <div class="title" style="margin-bottom: 15px">用户登录</div>
+        <form method="POST" novalidate autocomplete="off">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name == 'code' %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="row">
+                            <div class="col-xs-7">
+                                {{ field }}
+                                <span class="error-msg">{{ field.errors.0 }}</span>
+                            </div>
+                            <div class="col-xs-5">
+                                <img src="{% url 'image_code' %}" id="imageCode" title="点击更换图片"
+                                     style="cursor: pointer">
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="error-msg">{{ field.errors.0 }}</span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div>
+                <div style="float: right;" class="jump-link">
+                    <a href="{% url 'register' %}">尚未注册？点击注册</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-3">
+                    <input type="submit" class="btn btn-primary" value="登  录"/>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(function () {
+            $('#imageCode').click(function () {
+                var oldSrc = $(this).attr('src');  // 获取原来的地址
+                $(this).attr('src', oldSrc + "?");
+            })
+        })
+    </script>
+{% endblock %}
