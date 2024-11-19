@@ -7,7 +7,7 @@ import random
 
 from web import models
 from web.forms.bootstrap import BootStrapForm
-from utils import encrypt
+from web_utils import encrypt
 
 
 class RegisterModelForm(BootStrapForm, forms.ModelForm):

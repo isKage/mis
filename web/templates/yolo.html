@@ -1,0 +1,29 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 图片识别 {% endblock %}
+
+{% block css %}
+    <style>
+        img {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Upload an Image for YOLO Detection</h1>
+        <form action="/yolo/upload" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="image">
+            <input type="submit" value="Upload">
+        </form>
+        {% if image_url %}
+            <h2>Result:</h2>
+            <img src="{{ image_url }}" alt="Processed Image">
+            <p>Number of People Detected: {{ count }}</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

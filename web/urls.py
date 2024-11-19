@@ -1,5 +1,7 @@
 from django.urls import path, include
-from web.views import account, home
+from mis import settings
+from django.conf.urls.static import static
+from web.views import account, home, yolo
 
 urlpatterns = [
 
@@ -12,4 +14,11 @@ urlpatterns = [
     # 首页
     path("index/", home.index, name="index"),
 
+    # 图片识别
+    path("yolo/index", yolo.index, name="yolo_index"),
+    path("yolo/upload", yolo.upload_image, name="upload_image"),
 ]
+
+# # 添加媒体文件的 URL 配置
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

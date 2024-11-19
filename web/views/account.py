@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from web.forms.account import RegisterModelForm, LoginForm
 from web import models
-from utils.image_code import check_code
+from web_utils.image_code import check_code
 
 
 def register(request):
