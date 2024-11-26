@@ -1,0 +1,52 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 偏好设置 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <style>
+        .error-msg {
+            color: red;
+            position: absolute;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            margin-top: 10px;
+        }
+
+        .jump-link {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">偏好信息</h3>
+            </div>
+
+{#            <div id="messages">#}
+{#                <!-- 提示信息 -->#}
+{#                {% if success_message %}#}
+{#                    <p style="color: green;">{{ success_message }}</p>#}
+{#                {% endif %}#}
+{#                {% if error_message %}#}
+{#                    <p style="color: red;">{{ error_message }}</p>#}
+{#                {% endif %}#}
+{#            </div>#}
+
+            <!-- 表单 -->
+            <div class="panel-body">
+                <form method="post" action={% url 'preference' %}>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

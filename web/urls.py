@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo
+from web.views import account, home, yolo, prefer
 
 urlpatterns = [
 
@@ -17,6 +17,9 @@ urlpatterns = [
     # 图片识别
     path("yolo/index", yolo.index, name="yolo_index"),
     path("yolo/upload", yolo.upload_image, name="upload_image"),
+
+    # 偏好信息
+    path('prefer/', prefer.preference_view, name='preference'),
 ]
 
 # # 添加媒体文件的 URL 配置
