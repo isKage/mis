@@ -56,7 +56,32 @@
                 <li><a href="{% url 'yolo_index' %}">教室人数</a></li>
                 <li><a href="#">项目列表</a></li>
                 <li><a href="#">帮助文档</a></li>
-                <li><a href="#">链接</a></li>
+
+                {# 链接项：下拉菜单 #}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-github"></i> 相关链接 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://github.com/isKage/mis" target="_blank">
+                                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                                     alt="GitHub Logo" style="width: 20px; height: 20px; margin-right: 5px;">
+                                本项目代码
+                            </a>
+                            <a href="https://iskage.github.io/" target="_blank">
+                                <img src="{% static '/img/blog.png' %}"
+                                     alt="GitHub Logo" style="width: 20px; height: 20px; margin-right: 5px;">
+                                个人博客
+                            </a>
+                            <a href="https://github.com/ultralytics/yolov5" target="_blank">
+                                <img src="https://github.githubassets.com/images/icons/emoji/rocket.png"
+                                     alt="#" style="width: 20px; height: 20px; margin-right: 5px;">
+                                图片识别预训练模型YOLOV
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
 
             {# 右侧 #}
