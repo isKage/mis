@@ -1,0 +1,51 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {# 表格区 #}
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                用户列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>学号</th>
+                    <th>专业</th>
+                    <th>宿舍区</th>
+                    <th>偏好场地</th>
+                    <th>偏好学科</th>
+                    <th>偏好话题</th>
+                    <th>其他</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th scope="row">{{ obj.id }}</th>
+                        <td>{{ obj.userid }}</td>
+                        <td>{{ obj.student_id }}</td>
+                        <td>{{ obj.major }}</td>
+                        <td>{{ obj.dorm_area }}</td>
+                        <td>{{ obj.preferred_building }}</td>
+                        <td>{{ obj.preferred_subject }}</td>
+                        <td>{{ obj.preferred_topic }}</td>
+                        <td>{{ obj.additional_preferences }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

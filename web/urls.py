@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer, help, report
+from web.views import account, home, yolo, prefer, help, report, admin_user
 
 urlpatterns = [
 
@@ -20,6 +20,9 @@ urlpatterns = [
 
     # 偏好信息
     path('prefer/', prefer.preference_view, name='preference'),
+
+    # 用户列表
+    path('admin/user/list', admin_user.user_list, name='user_list'),
 
     # 帮助文档
     path('help/zh/', help.help_doc_zh, name='help_zh'),
