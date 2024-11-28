@@ -31,4 +31,4 @@ __pycache__/
 
 # report
 #./web/templates/report_pdf.html
-#./web/static/report.pdf
+web/static/report.pdf
