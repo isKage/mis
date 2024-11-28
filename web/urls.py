@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer, help, report, admin_user
+from web.views import account, home, yolo, prefer, help, report, admin_user, event
 
 urlpatterns = [
 
@@ -13,6 +13,9 @@ urlpatterns = [
 
     # 首页
     path("index/", home.index, name="index"),
+
+    path("event/", event.event_list, name="event_list"),
+    path("event/add/", event.event_add, name="event_add"),
 
     # 图片识别
     path("yolo/index", yolo.index, name="yolo_index"),

@@ -1,0 +1,100 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 讨论区 {% endblock %}
+
+{% block css %}
+    <style>
+        img {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if request.mis.user %}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                新 建
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">创建话题</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="panel-body">
+                                <form method="post" action="{% url 'event_add' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="topicName">话题名称</label>
+                                        <input type="text" class="form-control" id="topicName" name="topic_name"
+                                               required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="topicDescription">话题简介</label>
+                                        <textarea class="form-control" id="topicDescription" name="topic_description"
+                                                  rows="3" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="topicType">发起类型</label>
+                                        <select class="form-control" id="topicType" name="topic_type" required>
+                                            <option value="team">团队发起</option>
+                                            <option value="individual">个人发起</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="invitedMembers">邀请其他成员(用逗号分隔)</label>
+                                        <input type="text" class="form-control" id="invitedMembers"
+                                               name="invited_members">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">确 认</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取 消
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="height: 15px"></div>
+
+            {% for obj in events %}
+                <div class="panel panel-info">
+                    <div class="panel-heading">{{ obj.topic_name }}</div>
+                    <div class="panel-body">
+                        <p>{{ obj.topic_description }}</p>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">发起者：{{ obj.initiator.username }}</li>
+                        <li class="list-group-item">发起类型：{{ obj.topic_type }}</li>
+                        <li class="list-group-item">参与人数：{{ obj.participants }}</li>
+                    </ul>
+                </div>
+            {% endfor %}
+
+
+        {% else %}
+            <img src="{% static 'img/index/index-1.jpeg' %}">
+            <img src="{% static 'img/index/index-2.png' %}">
+            <img src="{% static 'img/index/index-3.png' %}">
+            <img src="{% static 'img/index/index-4.png' %}">
+            </div>
+        {% endif %}
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
