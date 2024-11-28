@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer
+from web.views import account, home, yolo, prefer, help
 
 urlpatterns = [
 
@@ -20,6 +20,10 @@ urlpatterns = [
 
     # 偏好信息
     path('prefer/', prefer.preference_view, name='preference'),
+
+    # 帮助文档
+    path('help/zh/', help.help_doc_zh, name='help_zh'),
+    path('help/en/', help.help_doc_en, name='help_en'),
 ]
 
 # # 添加媒体文件的 URL 配置

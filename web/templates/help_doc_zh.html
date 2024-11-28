@@ -1,0 +1,141 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 帮助文档 {% endblock %}
+
+{% block css %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Source+Code+Pro:wght@400&display=swap"
+          rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #2C3E50;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1em;
+            line-height: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        code {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            color: #d63384;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        blockquote {
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-left: 0;
+            font-style: italic;
+        }
+
+        pre {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #3498db;
+            color: #fff;
+            margin-top: 50px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>MIS（管理信息系统）：校园AI助手</h1>
+        <p>切换语言至英文，<a href="{% url 'help_en' %}">点击这里</a></p>
+
+        <h2>1. 项目简介</h2>
+        <p>该项目基于<code>Python3.9</code>，使用<code>Django</code>和<code>Mysql</code>构建。</p>
+        <p>在使用<code>YOLOV5</code>网络时，您需要安装一些数据分析相关的库。</p>
+
+        <h2>2. 安装步骤</h2>
+        <p>首先，在<code>Terminal</code>中创建一个新文件夹：</p>
+        <pre>mkdir newfile</pre>
+        <p>然后进入该文件夹：</p>
+        <pre>cd newfile</pre>
+        <p>接下来，克隆该项目到当前目录：</p>
+        <pre>git clone git@github.com:isKage/mis.git</pre>
+        <p>进入项目根目录：</p>
+        <pre>cd mis</pre>
+
+        <h2>3. 安装依赖</h2>
+        <p>注意：该项目依赖于<code>Python3.9</code></p>
+        <pre>pip install -r requirements.txt</pre>
+
+        <h2>4. Mysql 设置</h2>
+        <p>在 mis 目录下创建一个<code>local_settings.py</code>文件，并进行如下设置：</p>
+        <h3>设置语言</h3>
+        <pre>LANGUAGE_CODE = 'zh-hans'</pre>
+        <h3>Mysql 设置</h3>
+        <pre>
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mis',  # 使用你自己的数据库名称
+        'USER': 'root',  # 数据库用户
+        'PASSWORD': '******',  # 数据库密码
+        'HOST': '127.0.0.1',  # 本地数据库
+        'PORT': '3306',  # 默认端口
+    }
+}
+        </pre>
+        <p>接下来，运行以下命令创建数据表：</p>
+        <pre>python3 manage.py makemigrations</pre>
+        <pre>python3 manage.py migrate</pre>
+
+        <h2>5. 启动项目</h2>
+        <p>在<code>Terminal</code>中运行以下命令：</p>
+        <pre>python3 manage.py runserver</pre>
+        <p>然后，在浏览器中打开如下链接，若在本地运行：</p>
+        <blockquote>
+            <p>http://localhost:8000/</p>
+        </blockquote>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 MIS 项目. All Rights Reserved.</p>
+    </div>
+{% endblock %}
