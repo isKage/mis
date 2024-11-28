@@ -1,0 +1,95 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 报告 {% endblock %}
+
+{% block css %}
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 600px; /* 设置展示区域的高度 */
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        /* 全屏按钮的样式 */
+        .fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: white; /* 白色背景 */
+            border: 1px solid #ccc; /* 边框颜色与背景融合 */
+            color: #333; /* 按钮文本颜色 */
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+            border-radius: 5px; /* 圆角效果 */
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #f8f8f8; /* 鼠标悬停时的背景颜色 */
+        }
+
+        .fullscreen-btn:focus {
+            outline: none; /* 去掉焦点时的轮廓 */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="pdf-container" id="pdf-container">
+            <button class="fullscreen-btn" id="fullscreen-btn" style="margin-right: 150px">全屏</button>
+            <iframe src="{% static 'report.pdf' %}" type="application/pdf" width="100%" height="100%"
+                    id="pdf-iframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // 获取 PDF 容器和按钮元素
+        const pdfContainer = document.getElementById('pdf-container');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+        // 判断浏览器是否支持全屏API
+        function isFullscreenEnabled() {
+            return document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled;
+        }
+
+        // 切换全屏模式
+        function toggleFullscreen() {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                // 进入全屏
+                if (pdfContainer.requestFullscreen) {
+                    pdfContainer.requestFullscreen();
+                } else if (pdfContainer.mozRequestFullScreen) { // Firefox
+                    pdfContainer.mozRequestFullScreen();
+                } else if (pdfContainer.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    pdfContainer.webkitRequestFullscreen();
+                } else if (pdfContainer.msRequestFullscreen) { // IE/Edge
+                    pdfContainer.msRequestFullscreen();
+                }
+                fullscreenBtn.textContent = "退出全屏"; // 改变按钮文本
+            } else {
+                // 退出全屏
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+                fullscreenBtn.textContent = "全屏"; // 改变按钮文本
+            }
+        }
+
+        // 绑定全屏按钮事件
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+    </script>
+{% endblock %}

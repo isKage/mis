@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer, help
+from web.views import account, home, yolo, prefer, help, report
 
 urlpatterns = [
 
@@ -24,6 +24,9 @@ urlpatterns = [
     # 帮助文档
     path('help/zh/', help.help_doc_zh, name='help_zh'),
     path('help/en/', help.help_doc_en, name='help_en'),
+
+    # 报告
+    path('report/', report.report_pdf, name='report_pdf'),
 ]
 
 # # 添加媒体文件的 URL 配置

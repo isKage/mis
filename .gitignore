@@ -28,3 +28,7 @@ __pycache__/
 *.sqlite3
 
 # scripts
+
+# report
+#./web/templates/report_pdf.html
+#./web/static/report.pdf
