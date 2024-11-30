@@ -1,12 +1,18 @@
 {% extends 'layout/basic.html' %}
 {% load static %}
 
-{% block title %} 讨论区 {% endblock %}
+{% block title %} 话题管理 {% endblock %}
 
 {% block css %}
     <style>
         img {
             width: 100%;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .panel-hover {
@@ -80,10 +86,31 @@
 
 
             <div style="height: 15px"></div>
+
+            {#            {% for obj in events %}#}
+            {#                <div class="panel panel-hover {% if obj.initiator.id == request.mis.user.id %}panel-info{% else %}panel-default{% endif %}"#}
+            {#                     data-id="{{ obj.id }}" onclick="redirectToDetail({{ obj.id }})" style="cursor: pointer;">#}
+            {#                    <div class="panel-heading">{{ obj.topic_name }}</div>#}
+            {#                    <div class="panel-body">#}
+            {#                        <p>{{ obj.topic_description }}</p>#}
+            {#                    </div>#}
+            {#                    <ul class="list-group">#}
+            {#                        <li class="list-group-item">发起者：{{ obj.initiator.username }}</li>#}
+            {#                        <li class="list-group-item">发起类型：{{ obj.topic_type }}</li>#}
+            {#                        <li class="list-group-item">参与人数：{{ obj.participants }}</li>#}
+            {#                    </ul>#}
+            {#                </div>#}
+            {#            {% endfor %}#}
+
             {% for obj in events %}
-                <div class="panel panel-hover {% if obj.initiator.id == request.mis.user.id %}panel-info{% else %}panel-default{% endif %}"
-                     data-id="{{ obj.id }}" onclick="redirectToDetail({{ obj.id }})" style="cursor: pointer;">
-                    <div class="panel-heading">{{ obj.topic_name }}</div>
+                <div class="panel panel-info panel-hover" data-id="{{ obj.id }}"
+                     onclick="redirectToDetail({{ obj.id }})" style="cursor: pointer;">
+                    <div class="panel-heading d-flex justify-content-between align-items-center">
+                        <div>{{ obj.topic_name }}</div>
+                        {#                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ obj.id }}">#}
+                        {#                            删除#}
+                        {#                        </button>#}
+                    </div>
                     <div class="panel-body">
                         <p>{{ obj.topic_description }}</p>
                     </div>

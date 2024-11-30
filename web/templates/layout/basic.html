@@ -55,6 +55,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'event_list' %}">讨论区</a></li>
 
+                <li><a href="{% url 'my_event' %}">话题管理</a></li>
+
                 <li><a href="{% url 'yolo_index' %}">教室人数</a></li>
 
                 <li><a href="{% url 'user_list' %}">用户列表</a></li>
@@ -111,6 +113,7 @@
                            aria-expanded="false">{{ request.mis.user.username }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'preference' %}">个人信息</a></li>
+                            <li><a href="{% url 'my_event' %}">话题管理</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{% url 'logout' %}">退 出</a></li>
                         </ul>

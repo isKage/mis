@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from web.models import Event, UserInfo
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
 
 def event_list(request):
@@ -57,3 +59,37 @@ def event_add(request):
     events = Event.objects.all()
     # 将 events 传递给模板
     return render(request, 'event.html', {'events': events})
+
+
+def my_event(request):
+    user = request.mis.user
+    if not user:
+        return redirect('login.html')
+
+    events = Event.objects.filter(initiator=user)
+    return render(request, 'my_event.html', {'events': events})
+
+
+# @login_required  # 确保用户已登录
+@require_http_methods(["DELETE"])
+def event_delete(request, event_id):
+    user = request.mis.user  # 从中间件获取当前用户
+    if not user:
+        return JsonResponse({"error": "未登录用户不能删除"}, status=403)
+
+    try:
+        # 确保只有发起者可以删除事件
+        print(event_id, user)
+        event = Event.objects.get(id=event_id, initiator=user)
+        event.delete()
+        return JsonResponse({"message": "删除成功"}, status=200)
+    except Event.DoesNotExist:
+        return JsonResponse({"error": "事件不存在或无权删除"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": "服务器错误：" + str(e)}, status=500)
+
+
+def event_detail(request, event_id):
+    # 根据 ID 获取事件对象
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'event_detail.html', {'event': event})

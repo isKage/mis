@@ -11,11 +11,15 @@ urlpatterns = [
     path("image/code/", account.image_code, name="image_code"),  # 验证码图片生成
     path("logout/", account.logout, name="logout"),  # 导航条退出
 
+    path("myevent/", event.my_event, name="my_event"),
+    path("event/delete/<int:event_id>/", event.event_delete, name="event_delete"),
+
     # 首页
     path("index/", home.index, name="index"),
 
     path("event/", event.event_list, name="event_list"),
     path("event/add/", event.event_add, name="event_add"),
+    path('event/detail/<int:event_id>/', event.event_detail, name='event_detail'),
 
     # 图片识别
     path("yolo/index", yolo.index, name="yolo_index"),

@@ -1,0 +1,92 @@
+{% extends 'layout/basic.html' %}
+
+{% block title %} 详情 {% endblock %}
+{% block css %}
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .panel-hover:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <!-- 隐藏的 CSRF Token -->
+        <form style="display:none;">
+            {% csrf_token %}
+        </form>
+
+        {% if event.initiator.id == request.mis.user.id %}
+            <button class="btn btn-danger btn-sm delete-btn" data-id="{{ event.id }}">
+                删 除
+            </button>
+            <div style="height: 15px"></div>
+        {% endif %}
+
+        <div class="panel {% if event.initiator.id == request.mis.user.id %}panel-info{% else %}panel-success{% endif %}">
+            <div class="panel-heading">{{ event.topic_name }}</div>
+            <div class="panel-body">
+                <p>{{ event.topic_description }}</p>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">发起者：{{ event.initiator.username }}</li>
+                <li class="list-group-item">发起类型：{{ event.topic_type }}</li>
+                <li class="list-group-item">参与人数：{{ event.participants }}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll(".delete-btn");
+
+            deleteButtons.forEach(deleteButton => {
+                deleteButton.addEventListener("click", function () {
+                    const eventId = this.getAttribute("data-id");
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    if (confirm("确定要删除这个话题吗？")) {
+                        fetch(`/event/delete/${eventId}/`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRFToken": csrfToken,
+                            }
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    alert("删除成功！");
+                                    window.location.href = "{% url 'event_list' %}"; // 跳转到事件列表页
+                                } else {
+                                    response.json().then(data => {
+                                        alert(data.error || "删除失败，请重试！");
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error("删除失败：", error);
+                                alert("删除失败，请稍后再试！");
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
