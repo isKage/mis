@@ -41,3 +41,19 @@ class Event(models.Model):
 
     def __str__(self):
         return self.topic_name
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=200, verbose_name="文章标题")
+    content = models.TextField(verbose_name="文章内容")  # Markdown 内容
+    creator = models.ForeignKey(
+        UserInfo, on_delete=models.CASCADE, related_name="articles", verbose_name="创建者"
+    )
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="articles", verbose_name="所属事件"
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新时间")
+
+    def __str__(self):
+        return self.title

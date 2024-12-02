@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
-from web.models import Event, UserInfo
+from web.models import Event, UserInfo, Article
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from web.forms.event import ArticleForm
 
 
 def event_list(request):
@@ -90,6 +91,48 @@ def event_delete(request, event_id):
 
 
 def event_detail(request, event_id):
-    # 根据 ID 获取事件对象
     event = get_object_or_404(Event, id=event_id)
-    return render(request, 'event_detail.html', {'event': event})
+    articles = Article.objects.filter(event=event).order_by('-updated_at')  # 按创建时间降序排序
+    return render(request, 'event_detail.html', {'event': event, 'articles': articles})
+
+
+# 创建文章视图
+def article_create(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.event = event
+            article.creator = request.mis.user
+            article.save()
+            return redirect("event_detail", event_id=event.id)  # 重定向到事件详情页面
+    else:
+        form = ArticleForm()
+    return render(request, "article_form.html", {"form": form, "event": event})
+
+
+# 编辑文章视图
+def article_edit(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect("event_detail", event_id=article.event.id)  # 编辑后返回事件详情页
+    else:
+        form = ArticleForm(instance=article)
+    return render(request, "article_form.html", {"form": form, "event": article.event})
+
+
+@csrf_exempt
+def article_delete(request, article_id):
+    if request.method == "DELETE":
+        article = get_object_or_404(Article, id=article_id)
+        # 验证是否是文章创建者
+        if article.creator != request.mis.user:
+            return JsonResponse({"error": "你没有权限删除此文章！"}, status=403)
+
+        article.delete()
+        return JsonResponse({"message": "文章删除成功！"})
+    return JsonResponse({"error": "仅支持 DELETE 请求！"}, status=405)
