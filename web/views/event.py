@@ -9,7 +9,7 @@ from web.forms.event import ArticleForm
 
 def event_list(request):
     # GET 请求时加载创建话题页面
-    events = Event.objects.all()
+    events = Event.objects.all().order_by('-created_at')
     # 将 events 传递给模板
     return render(request, 'event.html', {'events': events})
 

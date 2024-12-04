@@ -51,7 +51,8 @@ def login(request):
             # 登录成功为止
             request.session['user_id'] = user_object.id
             request.session.set_expiry(60 * 60 * 24 * 5)  # 5天有效
-            return render(request, 'event.html')
+            # return render(request, 'event.html')
+            return redirect('event_list')
 
         form.add_error('username', '用户名或密码错误')
 
