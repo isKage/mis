@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from web.forms.event import ArticleForm
+from web_utils.kimi import conclusion
 
 
 def event_list(request):
@@ -136,3 +137,15 @@ def article_delete(request, article_id):
         article.delete()
         return JsonResponse({"message": "文章删除成功！"})
     return JsonResponse({"error": "仅支持 DELETE 请求！"}, status=405)
+
+
+@csrf_exempt
+def summarize_article(request, article_id):
+    if request.method == "POST":
+        article = get_object_or_404(Article, id=article_id)
+        try:
+            summary = conclusion(article.content)
+            return JsonResponse({"summary": summary})
+        except Exception as e:
+            return JsonResponse({"error": f"总结失败: {str(e)}"}, status=500)
+    return JsonResponse({"error": "仅支持 POST 请求"}, status=405)

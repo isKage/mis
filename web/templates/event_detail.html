@@ -56,7 +56,7 @@
         <!-- 文章展示 -->
         <h4>相关文章</h4>
         {% for article in articles %}
-            <div class="panel panel-default panel-hover">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{{ article.title }}</span>
                     {% if article.creator.id == request.mis.user.id %}
@@ -69,6 +69,15 @@
                 </div>
 
                 <div class="panel-body">
+                    <!-- 新增“总结”按钮和显示区域 -->
+                    <button class="btn btn-sm btn-info summarize-article-btn" data-id="{{ article.id }}"
+                            style="margin-bottom: 10px;">
+                        总结
+                    </button>
+                    <div id="summary-{{ article.id }}" class="summary-panel" style="display: none;">
+                        <p class="summary-content"></p>
+                    </div>
+
                     <div id="markdown-view-{{ article.id }}">
                         <textarea style="display:none;">{{ article.content }}</textarea>
                     </div>
@@ -168,5 +177,58 @@
                 }
             });
         });
+
+
+        // 新增：文章总结功能
+        const summarizeButtons = document.querySelectorAll(".summarize-article-btn");
+        summarizeButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const articleId = this.dataset.id;
+                const summaryPanel = document.getElementById(`summary-${articleId}`);
+                const summaryContent = summaryPanel.querySelector(".summary-content");
+
+                // 显示加载状态
+                summaryContent.textContent = "正在生成总结...";
+                summaryPanel.style.display = "block";
+
+                // 发起 AJAX 请求
+                fetch(`/article/${articleId}/summarize/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("总结失败，请稍后重试");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const summaryText = data.summary; // 后端返回的总结内容
+                        summaryContent.textContent = ""; // 清空加载提示
+                        displayTextDynamically(summaryText, summaryContent);
+                    })
+                    .catch(error => {
+                        summaryContent.textContent = error.message;
+                    });
+            });
+        });
+
+        // 动态逐字显示文字
+        function displayTextDynamically(text, container, delay = 50) {
+            let index = 0;
+
+            function typeNextChar() {
+                if (index < text.length) {
+                    container.textContent += text[index];
+                    index++;
+                    setTimeout(typeNextChar, delay); // 每个字延迟 delay 毫秒
+                }
+            }
+
+            typeNextChar();
+        }
     </script>
 {% endblock %}

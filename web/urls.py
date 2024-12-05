@@ -23,6 +23,7 @@ urlpatterns = [
     path('event/<int:event_id>/article/new/', event.article_create, name='article_create'),  # 新建文章
     path('article/<int:article_id>/edit/', event.article_edit, name='article_edit'),  # 编辑文章
     path('article/delete/<int:article_id>/', event.article_delete, name='article_delete'),
+    path('article/<int:article_id>/summarize/', event.summarize_article, name='article_summarize'),  # 总结文章
 
     # 图片识别
     path("yolo/index", yolo.index, name="yolo_index"),
