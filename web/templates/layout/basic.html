@@ -53,27 +53,51 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             {# 左侧 #}
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'event_list' %}">讨论区</a></li>
+                <li><a href="{% url 'event_list' %}">
+                    <i class="fa fa-commenting"></i>
+                    讨论区
+                </a></li>
 
-                <li><a href="{% url 'my_event' %}">话题管理</a></li>
+                <li><a href="{% url 'my_event' %}">
+                    <i class="fa fa-bookmark"></i>
+                    话题管理
+                </a></li>
 
-                <li><a href="{% url 'yolo_index' %}">教室人数</a></li>
+                <li><a href="{% url 'yolo_index' %}">
+                    <i class="fa fa-file-image-o"></i>
+                    图片识别
+                </a></li>
 
-                <li><a href="{% url 'user_list' %}">用户列表</a></li>
+                <li><a href="{% url 'user_list' %}">
+                    <i class="fa fa-th-list"></i>
+                    用户列表
+                </a></li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"> 帮助文档 <span class="caret"></span></a>
+                       aria-expanded="false">
+                        <i class="fa fa-folder-open"></i>
+                        相关文档
+                        <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'help_zh' %}">帮助文档</a></li>
-                        <li><a href="{% url 'report_pdf' %}">报告</a></li>
+                        <li><a href="{% url 'help_zh' %}">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            帮助文档
+                        </a></li>
+                        <li><a href="{% url 'report_pdf' %}">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            报告
+                        </a></li>
                     </ul>
                 </li>
 
                 {# 链接项：下拉菜单 #}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"><i class="fa fa-github"></i> 相关链接 <span class="caret"></span></a>
+                       aria-expanded="false">
+                        <i class="fa fa-link"></i>
+                        相关链接
+                        <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="https://github.com/isKage/mis" target="_blank">
@@ -86,10 +110,27 @@
                                      alt="GitHub Logo" style="width: 20px; height: 20px; margin-right: 5px;">
                                 个人博客
                             </a>
+
                             <a href="https://github.com/ultralytics/yolov5" target="_blank">
                                 <img src="https://github.githubassets.com/images/icons/emoji/rocket.png"
                                      alt="#" style="width: 20px; height: 20px; margin-right: 5px;">
                                 图片识别预训练模型YOLOV
+                            </a>
+
+                            <a href="https://same-smile-119.notion.site/fudan-82b7f0265fc743f7a9bbf32293495b52"
+                               target="_blank">
+                                <!--<i class="fa fa-book" aria-hidden="true"></i>-->
+                                <img src="https://github.githubassets.com/images/icons/emoji/book.png"
+                                     alt="#" style="width: 20px; height: 20px; margin-right: 5px;">
+                                fudan开放题库
+                            </a>
+
+                            <a href="https://3108.fudan.edu.cn/phoneIndex"
+                               target="_blank">
+                                <!--<i class="fa fa-book" aria-hidden="true"></i>-->
+                                <img src="https://github.githubassets.com/images/icons/emoji/link.png"
+                                     alt="#" style="width: 20px; height: 20px; margin-right: 5px;">
+                                3108青年创新平台
                             </a>
                         </li>
                     </ul>
@@ -110,10 +151,19 @@
                     </form>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">{{ request.mis.user.username }} <span class="caret"></span></a>
+                           aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            {{ request.mis.user.username }}
+                            <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'preference' %}">个人信息</a></li>
-                            <li><a href="{% url 'my_event' %}">话题管理</a></li>
+                            <li><a href="{% url 'preference' %}">
+                                <i class="fa fa-info-circle"></i>
+                                个人信息
+                            </a></li>
+                            <li><a href="{% url 'my_event' %}">
+                                <i class="fa fa-bookmark"></i>
+                                话题管理
+                            </a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{% url 'logout' %}">退 出</a></li>
                         </ul>
