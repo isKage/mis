@@ -4,10 +4,11 @@ import django
 from openai import OpenAI
 from django.conf import settings
 from django.http import HttpRequest
+from web.models import Preference
+import json
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mis.settings")  # 替换 your_project 为你的项目名称
-# django.setup()  # 初始化 Django 环境
-
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mis.settings")  # 替换 your_project 为你的项目名称
+django.setup()  # 初始化 Django 环境
 
 client = OpenAI(
     api_key=settings.KIMI_API_KEY,
@@ -48,6 +49,40 @@ def kimi_chat(content):
     return completion.choices[0].message.content
 
 
+def partner(user_name):
+    preferences = Preference.objects.all()
+
+    preference_str = ""
+    for preference in preferences:
+        # 构建每个用户的偏好信息，以“人名：字段1，字段2”的格式拼接
+        preference_str += f"{preference.userid.username}: " \
+                          f"学号{preference.student_id}，" \
+                          f"专业{preference.major}，" \
+                          f"宿舍区{preference.dorm_area}，" \
+                          f"偏好建筑{preference.preferred_building}，" \
+                          f"偏好学科{preference.preferred_subject}，" \
+                          f"偏好话题{preference.preferred_topic}，" \
+                          f"附加偏好{preference.additional_preferences}；"
+
+    # 在生成的字符串中加入当前用户的名字和所有用户的偏好信息
+    content = f"直接给出相似性最高的3人，简短分析（不超过200字），当前用户是: {user_name}，所有用户是: {preference_str}。不包含自己{user_name}"
+
+    # 调用 AI 完成模型获取推荐结果
+    completion = client.chat.completions.create(
+        model="moonshot-v1-8k",
+        messages=[
+            {"role": "system",
+             "content": "你是MIS网站助手。现在你作为这个网站的AI助手，要求是根据我提供的一组数据，按照相似性为当前用户推荐前三名相似的用户名"},
+            {"role": "user",
+             "content": content}
+        ],
+        temperature=0.3,
+    )
+
+    ans = completion.choices[0].message.content
+    return ans
+
+
 if __name__ == '__main__':
     content = ("# 数学分析自习搭子## 目标- 共同学习数学分析，夯实基础。"
                "- 解决疑难问题，相互讨论。- 提高学习效率，培养逻辑思维。"
@@ -66,3 +101,5 @@ if __name__ == '__main__':
                "- 让我们一起进步，努力搞定数学分析！")
     conclusions = conclusion(content=content)
     print(conclusions)
+    # preferences = Preference.objects.all()
+    # print(preferences)

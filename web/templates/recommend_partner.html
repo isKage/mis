@@ -1,0 +1,73 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 个人信息 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+    <style>
+        .error-msg {
+            color: red;
+            position: absolute;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            margin-top: 10px;
+        }
+
+        .jump-link {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">搭档推荐</h3>
+            </div>
+
+            <div class="panel-body">
+                <form method="post" action="{% url 'recommend_partner' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm">推荐搭档</button>
+                </form>
+
+                <div style="min-height: 20px"></div>
+
+                <div id="markdown-view">
+                    <textarea style="display:none;" id="recommended-partners">{{ recommended_partners }}</textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'plugins/editor-md/editormd.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/marked.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/prettify.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/raphael.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/underscore.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/sequence-diagram.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/flowchart.min.js' %}"></script>
+    <script src="{% static 'plugins/editor-md/lib/jquery.flowchart.min.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("recommended-partners");
+            if (textarea) {
+                const markdownContent = textarea.value;
+                // 使用 editormd 渲染 Markdown 内容
+                editormd.markdownToHTML("markdown-view", {
+                    markdown: markdownContent,
+                    htmlDecode: "style,script,iframe",
+                    toc: true,
+                    tocm: true
+                });
+            }
+        });
+    </script>
+{% endblock %}

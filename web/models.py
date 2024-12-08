@@ -21,6 +21,10 @@ class Preference(models.Model):
     preferred_subject = models.CharField(max_length=100, blank=True, null=True, verbose_name='偏好学科')
     preferred_topic = models.CharField(max_length=100, blank=True, null=True, verbose_name='偏好话题')
     additional_preferences = models.CharField(max_length=100, blank=True, null=True, verbose_name='其他描述性偏好')
+    recommendation_text = models.TextField(null=True, blank=True)  # 新增字段存储推荐文本
+
+    def __str__(self):
+        return self.userid.username
 
 
 class Event(models.Model):

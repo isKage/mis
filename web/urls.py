@@ -31,6 +31,7 @@ urlpatterns = [
 
     # 偏好信息
     path('prefer/', prefer.preference_view, name='preference'),
+    path('recommend_partner/', prefer.recommend_partner, name='recommend_partner'),  # 添加新的 URL 路径
 
     # 用户列表
     path('admin/user/list', admin_user.user_list, name='user_list'),
