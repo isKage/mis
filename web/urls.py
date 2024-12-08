@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer, help, report, admin_user, event, group
+from web.views import account, home, yolo, prefer, help, report, admin_user, event, group, chat
 
 urlpatterns = [
 
@@ -50,6 +50,9 @@ urlpatterns = [
     path('groups/requests/approve/<int:request_id>/', group.approve_request, name='approve_request'),
     path('groups/delete/<int:group_id>/', group.delete_group, name='group_delete'),
     path('groups/leave/<int:group_id>/', group.group_leave, name='group_leave'),
+
+    # chat kimi
+    path('chat/', chat.chat, name='chat'),
 ]
 
 # # 添加媒体文件的 URL 配置

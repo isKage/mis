@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
+import os
+import django
 from openai import OpenAI
 from django.conf import settings
-
-# import os
-# import django
+from django.http import HttpRequest
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mis.settings")  # 替换 your_project 为你的项目名称
 # django.setup()  # 初始化 Django 环境
+
 
 client = OpenAI(
     api_key=settings.KIMI_API_KEY,
@@ -20,10 +21,26 @@ def conclusion(content):
         model="moonshot-v1-8k",
         messages=[
             {"role": "system",
-             "content": "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。"
-                        "你会为用户提供安全，有帮助，准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。"
+             "content": "你是MIS网站助手"
                         "现在你作为一个文章总结助手，删除读取文章内容，尤其是markdown格式的内容，并返回对内容的简要总结。"},
             {"role": "user", "content": asked}
+        ],
+        temperature=0.3,
+    )
+
+    return completion.choices[0].message.content
+
+
+def kimi_chat(content):
+    completion = client.chat.completions.create(
+        model="moonshot-v1-8k",
+        messages=[
+            {"role": "system",
+             "content": "你是MIS网站助手。"
+                        "现在你作为这个网站的AI助手，能力是回答用户发出的提问，同时能够与用户正常沟通。"
+                        "网站的功能是为客户提供一个学习、交流的平台，平台上有许多公开的学习资源，用户可以自己创建话题、小组，并与其他用户一同讨论。"
+             },
+            {"role": "user", "content": content}
         ],
         temperature=0.3,
     )

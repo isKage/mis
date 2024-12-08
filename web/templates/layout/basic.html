@@ -19,6 +19,80 @@
             display: none;
         }
 
+        /* 聊天框的整体样式 */
+        #chat-box {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+        }
+
+        /* 聊天框头部 */
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        /* 聊天内容区 */
+        #chat-content {
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        /* 输入框的样式 */
+        #chat-input {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            left: 0;
+            padding: 10px;
+        }
+
+        /* 发送按钮的样式 */
+        #send-message {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            border-radius: 0;
+        }
+
+        /* 聊天按钮的样式 */
+        #btn-chat {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: #337ab7;
+            color: white;
+            border-radius: 50%;
+            padding: 15px; /* 调整内边距以确保按钮足够大 */
+            font-size: 24px; /* 设置字体大小以适配图标 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            display: flex; /* 使用 flex 布局使内容居中 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            width: 45px; /* 设置按钮的宽度 */
+            height: 45px; /* 设置按钮的高度 */
+        }
+
+        /* 关闭按钮的样式 */
+        .close {
+            color: white;
+            font-size: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
         .btn-circle {
             width: 45px;
             height: 45px;
@@ -32,6 +106,28 @@
     {% block css %}{% endblock %}
 </head>
 <body>
+
+<!-- 添加聊天按钮 -->
+<button id="btn-chat" class="btn btn-primary btn-floating btn-lg btn-circle">
+    <i class="fa fa-comment" aria-hidden="true"></i>
+</button>
+
+<!-- 添加聊天框 -->
+<div id="chat-box" class="chat-box"
+     style="display: none; position: fixed; bottom: 150px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+    <div class="chat-header" style="background-color: #007bff; color: white; padding: 10px;">
+        MIS AI Chat
+        <button id="close-chat" class="close" style="float: right; color: white;">&times;</button>
+    </div>
+    <div id="chat-content" style="padding: 10px; height: 300px; overflow-y: auto;">
+        <!-- 聊天内容 -->
+    </div>
+    <input id="chat-input" type="text" class="form-control" placeholder="输入消息..."
+           style="position: absolute; bottom: 0; width: 100%;"/>
+    <button id="send-message" class="btn btn-primary"
+            style="position: absolute; bottom: 0; right: 0; border-radius: 0;">发送
+    </button>
+</div>
 
 {# 导航条 #}
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -203,12 +299,46 @@
     <i class="fa fa-arrow-up" aria-hidden="true"></i>
 </button>
 
-
 {% block content %}{% endblock %}
 
 <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+
 <script>
+    // 显示和隐藏聊天框
+    document.getElementById('btn-chat').addEventListener('click', function () {
+        var chatBox = document.getElementById('chat-box');
+        chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // 关闭聊天框
+    document.getElementById('close-chat').addEventListener('click', function () {
+        document.getElementById('chat-box').style.display = 'none';
+    });
+
+    // 发送消息到后台并显示在聊天框
+    document.getElementById('send-message').addEventListener('click', function () {
+        var message = document.getElementById('chat-input').value;
+        console.log('Sending message:', message);  // 在控制台查看
+        if (message) {
+            document.getElementById('chat-content').innerHTML += '<div><strong>你：</strong>' + message + '</div>';
+            document.getElementById('chat-input').value = '';
+            // 调用后端API获取回复
+            fetch('/chat/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'message': message})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('chat-content').innerHTML += '<div><strong>MIS：</strong>' + data.reply + '</div>';
+                    // 滚动到最底部
+                    document.getElementById('chat-content').scrollTop = document.getElementById('chat-content').scrollHeight;
+                });
+        }
+    });
+
     //Get the button
     let mybutton = document.getElementById("btn-back-to-top");
 
