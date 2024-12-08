@@ -1,0 +1,148 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/editor-md/css/editormd.preview.min.css' %}">
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .panel-hover:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>小组列表</h2>
+        <div style="min-height: 10px"></div>
+        <a href="{% url 'group_add' %}" class="btn btn-primary">创建小组</a>
+        <div style="min-height: 20px"></div>
+
+        {% for group in groups %}
+            <div class="panel panel-hover {% if group.creator.id == request.mis.user.id or request.mis.user in group.members.all %}panel-info{% else %}panel-default{% endif %}">
+                <div class="panel-heading">
+                    <span>{{ group.group_name }}</span>
+
+                    <div class="btn-group">
+                        <!-- 如果话题存在，显示查看话题按钮 -->
+                        {% if group.topic %}
+                            <a href="{% url 'event_detail' group.topic.id %}" class="btn btn-info btn-sm">查看话题</a>
+                        {% else %}
+                            {% if group.creator == request.mis.user %}
+                                <a href="{% url 'event_list' %}" class="btn btn-default btn-sm">创建话题</a>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if group.creator != request.mis.user %}
+                            <!-- 显示退出小组按钮，仅当用户是小组成员时 -->
+                            {% if request.mis.user in group.members.all %}
+                                <a href="{% url 'group_leave' group.id %}" class="btn btn-warning btn-sm">退出小组</a>
+                            {% else %}
+                                <button class="btn btn-success btn-sm" data-toggle="modal"
+                                        data-target="#joinModal{{ group.id }}">
+                                    加入小组
+                                </button>
+                            {% endif %}
+                        {% endif %}
+
+                        <!-- 如果当前用户是小组创建者，显示删除按钮 -->
+                        {% if group.creator == request.mis.user %}
+                            <button class="btn btn-danger btn-sm" data-toggle="modal"
+                                    data-target="#deleteModal{{ group.id }}">
+                                删除小组
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <p>{{ group.description }}</p>
+                </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item">创建者: {{ group.creator.username }}</li>
+                    <li class="list-group-item">成员数量: {{ group.members.count }}</li>
+                    <li class="list-group-item">创建时间: {{ group.created_at }}</li>
+                </ul>
+
+
+            </div>
+
+            <!-- 加入小组模态框 -->
+            <div class="modal fade" id="joinModal{{ group.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post" action="{% url 'group_join_request' group.id %}">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title">申请加入 {{ group.group_name }}</h5>
+                            </div>
+                            <div class="modal-body">
+                                <textarea name="reason" class="form-control" placeholder="填写申请理由"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 删除小组模态框 -->
+            {% if group.creator == request.mis.user %}
+                <div class="modal fade" id="deleteModal{{ group.id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">确认删除</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p>您确定要删除小组 <strong>{{ group.group_name }}</strong> 吗？该操作无法撤销。</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'group_delete' group.id %}" class="btn btn-danger">确认删除</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+
+<div class="panel panel-hover {% if obj.initiator.id == request.mis.user.id %}panel-info{% else %}panel-default{% endif %}"
+     data-id="{{ obj.id }}" onclick="redirectToDetail({{ obj.id }})" style="cursor: pointer;">
+    <div class="panel-heading">{{ obj.topic_name }}</div>
+    <div class="panel-body">
+        <p>{{ obj.topic_description }}</p>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">发起者：{{ obj.initiator.username }}</li>
+        <li class="list-group-item">发起类型：{{ obj.topic_type }}</li>
+        <!--
+                        <li class="list-group-item">参与人数：{{ obj.participants }}</li>
+                        -->
+    </ul>
+</div>

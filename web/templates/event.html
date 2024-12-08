@@ -23,6 +23,8 @@
 
 {% block content %}
     <div class="container">
+        <h2>话题列表</h2>
+        <div style="min-height: 10px"></div>
         {% if request.mis.user %}
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
@@ -90,7 +92,9 @@
                     <ul class="list-group">
                         <li class="list-group-item">发起者：{{ obj.initiator.username }}</li>
                         <li class="list-group-item">发起类型：{{ obj.topic_type }}</li>
+                        <!--
                         <li class="list-group-item">参与人数：{{ obj.participants }}</li>
+                        -->
                     </ul>
                 </div>
             {% endfor %}

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from mis import settings
 from django.conf.urls.static import static
-from web.views import account, home, yolo, prefer, help, report, admin_user, event
+from web.views import account, home, yolo, prefer, help, report, admin_user, event, group
 
 urlpatterns = [
 
@@ -41,6 +41,15 @@ urlpatterns = [
 
     # 报告
     path('report/', report.report_pdf, name='report_pdf'),
+
+    # 小组
+    path('groups/', group.group_list, name='group_list'),
+    path('groups/add/', group.group_add, name='group_add'),
+    path('groups/join/<int:group_id>/', group.group_join_request, name='group_join_request'),
+    path('groups/requests/', group.membership_requests, name='membership_requests'),
+    path('groups/requests/approve/<int:request_id>/', group.approve_request, name='approve_request'),
+    path('groups/delete/<int:group_id>/', group.delete_group, name='group_delete'),
+    path('groups/leave/<int:group_id>/', group.group_leave, name='group_leave'),
 ]
 
 # # 添加媒体文件的 URL 配置

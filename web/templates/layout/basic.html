@@ -58,9 +58,16 @@
                     讨论区
                 </a></li>
 
+                <!--
                 <li><a href="{% url 'my_event' %}">
                     <i class="fa fa-bookmark"></i>
                     话题管理
+                </a></li>
+                -->
+
+                <li><a href="{% url 'group_list' %}">
+                    <i class="fa fa-group"></i>
+                    小组
                 </a></li>
 
                 <li><a href="{% url 'yolo_index' %}">
@@ -149,6 +156,17 @@
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
                     </form>
+
+                    <li>
+                        <a href="{% url 'membership_requests' %}">
+                            消息
+                            {% if unread_count > 0 %}
+                                <span class="badge badge-danger"
+                                      style="position: relative; top: -10px; left: -10px;">{{ unread_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">

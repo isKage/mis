@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 # Create your models here.
@@ -57,3 +58,40 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Group(models.Model):
+    group_name = models.CharField(max_length=100, verbose_name="小组名称")
+    description = models.TextField(verbose_name="小组简介", blank=True)
+    creator = models.ForeignKey(
+        UserInfo, on_delete=models.CASCADE, related_name="created_groups", verbose_name="创建者"
+    )
+    members = models.ManyToManyField(UserInfo, related_name="joined_groups", verbose_name="小组成员")
+    created_at = models.DateTimeField(default=now, verbose_name="小组创建时间")
+    topic = models.ForeignKey(
+        Event,
+        on_delete=models.SET_NULL,  # 删除话题时将 topic 设为 NULL
+        related_name="related_groups",
+        verbose_name="关联话题",
+        null=True,
+        blank=True,  # 表示此字段可以为空
+    )
+
+    def __str__(self):
+        return self.group_name
+
+
+class MembershipRequest(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="membership_requests")
+    applicant = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="sent_requests")
+    reason = models.TextField(verbose_name="申请理由")
+    status = models.CharField(
+        max_length=10,
+        choices=[('pending', '待处理'), ('approved', '已同意'), ('rejected', '已拒绝')],
+        default='pending',
+        verbose_name="状态",
+    )
+    created_at = models.DateTimeField(default=now, verbose_name="申请时间")
+
+    def __str__(self):
+        return f"{self.applicant.username} -> {self.group.group_name} ({self.status})"

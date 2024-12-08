@@ -1,0 +1,31 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <h2>创建小组</h2>
+        <div style="min-height: 20px"></div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="group_name">小组名称</label>
+            <input type="text" name="group_name" class="form-control" required>
+            <label for="description">小组简介</label>
+            <textarea name="description" class="form-control"></textarea>
+            <label for="topic_id">选择话题</label>
+            <select name="topic_id" class="form-control">
+                {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.topic_name }}</option>
+                {% endfor %}
+            </select>
+
+            <div style="min-height: 20px"></div>
+
+            <button type="submit" class="btn btn-success">创建</button>
+        </form>
+
+    </div>
+
+{% endblock %}
