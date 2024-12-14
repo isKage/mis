@@ -171,10 +171,12 @@
                     图片识别
                 </a></li>
 
+                {% if request.mis.user.admin %}
                 <li><a href="{% url 'user_list' %}">
                     <i class="fa fa-th-list"></i>
                     用户列表
                 </a></li>
+                {% endif %}
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
