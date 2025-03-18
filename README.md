@@ -1,3 +1,12 @@
+<p align="center">
+  <a title="License" target="_blank" href="https://github.com/isKage/mis/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/isKage/mis.svg?style=flat"></a>
+  <a title="GitHub Commits" target="_blank" href="https://github.com/isKage/mis/commits/main"><img alt="GitHub Commits" src="https://img.shields.io/github/commit-activity/m/isKage/mis.svg?style=flat&color=brightgreen&label=commits"></a>
+  <br><br>
+  <a title="GitHub Watchers" target="_blank" href="https://github.com/isKage/mis/watchers"><img alt="GitHub Watchers" src="https://img.shields.io/github/watchers/isKage/mis.svg?label=Watchers&style=social"></a>  
+  <a title="GitHub Stars" target="_blank" href="https://github.com/isKage/mis/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/isKage/mis.svg?label=Stars&style=social"></a>  
+  <a title="GitHub Forks" target="_blank" href="https://github.com/isKage/mis/network/members"><img alt="GitHub Forks" src="https://img.shields.io/github/forks/isKage/mis.svg?label=Forks&style=social"></a>  
+</p>
+
 # MIS（管理信息系统）：校园AI助手
 
 [lang: EN](./README_en.md)
